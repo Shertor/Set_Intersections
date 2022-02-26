@@ -1,0 +1,31 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "g++.exe build active file",
+            "command": "C:/msys64latest/mingw64/bin/g++.exe",
+            "args": [
+                "-std=c++17",
+                "-g",
+                "${file}",
+                "-fopenmp",
+                "-o",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe",
+                "-lbz2",
+                "-llibcurl"
+            ],
+            "options": {
+                "cwd": "C:\\msys64latest\\mingw64\\bin"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+
+        }
+    ]
+}
