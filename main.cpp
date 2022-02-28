@@ -308,9 +308,6 @@ int main()
     writeToFile(firstUniq, "C:\\Projects\\firstUniq.csv");
     writeToFile(secondUniq, "C:\\Projects\\secondUniq.csv");
 
-    // coutVector(firstUniq); || result on test : 3410,840310 3879,038768 6870,408673
-    // coutVector(secondUniq); || result on test : 3871,317303 3879,318739 3879,318739 4135,483974
-
     int end_time = clock();
     int search_time = end_time - start_time;
     std::cout << "runtime = " << search_time / 1000.0 / 60.0 << std::endl; // 14.1493
