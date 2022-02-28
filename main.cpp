@@ -16,16 +16,9 @@
 #include <tchar.h>
 #include <windows.h>
 
-#pragma warning(disable:4996)
+#pragma warning(disable : 4996)
 
 bool FORCE_DEBUG = false;
-
-/* For debug purposes */
-void coutVector(const std::vector<std::string> &input)
-{
-    for (auto & it : input)
-        std::cout << it << '\n';
-}
 
 /* PASS Format : 0000,000000 */
 bool is_valid_passport(const std::string &str)
@@ -34,36 +27,39 @@ bool is_valid_passport(const std::string &str)
     return regex_match(str, r);
 }
 
-
 void writeToFile(const std::vector<std::string> &data, const std::string &filePath)
 {
     std::ofstream out;
     out.open(filePath, std::ofstream::out | std::ofstream::trunc);
 
-    for (auto & item : data)
+    for (auto &item : data)
         out << item << std::endl;
 
     out.close();
 }
 
 /* Writes curl response to string */
-static size_t getResponseToString(void* contents, size_t size, size_t nmemb, void* userp) {
-    ((std::string*)userp)->append((char*)contents, size * nmemb);
+static size_t getResponseToString(void *contents, size_t size, size_t nmemb, void *userp)
+{
+    ((std::string *)userp)->append((char *)contents, size * nmemb);
     return size * nmemb;
 }
 
 /* Function to download into FILE with curl */
-size_t writeData(void* ptr, size_t size, size_t nmemb, FILE* stream) {
+size_t writeData(void *ptr, size_t size, size_t nmemb, FILE *stream)
+{
     size_t written = fwrite(ptr, size, nmemb, stream);
     return written;
 }
 
 /* Download from url into file */
-void downloadToFile(std::string url, const char* path) {
-    CURL* curl = curl_easy_init();
-    FILE* file = fopen(path, "wb");
+void downloadToFile(std::string url, const char *path)
+{
+    CURL *curl = curl_easy_init();
+    FILE *file = fopen(path, "wb");
 
-    if (url.size() > 0) {
+    if (url.size() > 0)
+    {
         std::cout << url.c_str() << std::endl;
 
         curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
@@ -72,14 +68,15 @@ void downloadToFile(std::string url, const char* path) {
 
         CURLcode response = curl_easy_perform(curl);
     }
-    
+
     curl_easy_cleanup(curl);
     fclose(file);
 }
 
 /* Should pase http to get link to .bz2 archive */
-std::string parseUrl() {
-    CURL * curl;
+std::string parseUrl()
+{
+    CURL *curl;
     CURLcode response;
     std::string strResponse;
     curl = curl_easy_init();
@@ -93,7 +90,8 @@ std::string parseUrl() {
     std::smatch m;
     bool result;
     result = regex_search(strResponse, m, reg);
-    if (result) {
+    if (result)
+    {
         std::cout << m[0] << std::endl;
         return m[0];
     }
@@ -101,17 +99,20 @@ std::string parseUrl() {
 }
 
 /* Should encode cyrillic */
-std::string encodeUrlHttps(std::string url){
-    CURL* curl = curl_easy_init();
+std::string encodeUrlHttps(std::string url)
+{
+    CURL *curl = curl_easy_init();
     std::string delimiter = "/";
     std::string encodedUrl("https:/");
 
     size_t pos = 0;
     std::string token;
 
-    while ((pos = url.find(delimiter)) != std::string::npos) {
+    while ((pos = url.find(delimiter)) != std::string::npos)
+    {
         token = url.substr(0, pos);
-        if (token != "https:"){
+        if (token != "https:")
+        {
             std::string part((curl_easy_escape(curl, token.c_str(), token.size())));
             encodedUrl.append(part);
             encodedUrl.append("/");
@@ -197,8 +198,8 @@ void readBZ2(const char *filePath, std::vector<std::string> &result)
  and places uniq values from first file into firstUniq,
   and uniq values from second file into secondUniq  */
 void compareFiles(const std::vector<std::string> &sortedFile1, const std::vector<std::string> &sortedFile2,
-                 std::vector<std::string> &firstUniq, std::vector<std::string> &secondUniq)
-                //  std::vector<std::string> &pairs)
+                  std::vector<std::string> &firstUniq, std::vector<std::string> &secondUniq)
+//  std::vector<std::string> &pairs)
 {
     std::string prevNum;
     prevNum.reserve(16);
@@ -233,12 +234,11 @@ void compareFiles(const std::vector<std::string> &sortedFile1, const std::vector
     std::cout << "Set search finished" << std::endl;
 }
 
-
 int main()
 {
     if (FORCE_DEBUG)
     {
-        
+
         std::string urlFromSite;
         std::string urlFromSiteEncoded;
         urlFromSite = parseUrl();
@@ -255,8 +255,8 @@ int main()
     int start_time = clock();
 
     // variables
-    const char* currentData = "current.csv.bz2";
-    const char* knownData = "known.csv.bz2";
+    const char *currentData = "current.csv.bz2";
+    const char *knownData = "known.csv.bz2";
     std::vector<std::string> files = {"C:\\Projects\\firstUniq.csv",
                                       "C:\\Projects\\secondUniq.csv"};
     //
@@ -282,9 +282,9 @@ int main()
     #pragma omp parallel sections
     {
         #pragma omp section
-            readBZ2(currentData, file1);
+        readBZ2(currentData, file1);
         #pragma omp section
-            readBZ2(knownData, file2);
+        readBZ2(knownData, file2);
     }
 
     // Writing first validated file into .csv
@@ -304,7 +304,6 @@ int main()
     std::cout << "firstUniq : " << firstUniq.size() << std::endl;   // result : 4785917 || result on test : 3
     std::cout << "secondUniq : " << secondUniq.size() << std::endl; // result : 192329 || result on test : 4
 
-
     std::cout << "Writing..." << std::endl;
     writeToFile(firstUniq, "C:\\Projects\\firstUniq.csv");
     writeToFile(secondUniq, "C:\\Projects\\secondUniq.csv");
@@ -314,7 +313,7 @@ int main()
 
     int end_time = clock();
     int search_time = end_time - start_time;
-    std::cout << "runtime = " << search_time / 1000.0 / 60.0 << std::endl; // parallel : 15.5879
+    std::cout << "runtime = " << search_time / 1000.0 / 60.0 << std::endl; // 14.1493
 
     std::vector<std::string>().swap(file1);
     std::vector<std::string>().swap(file2);
