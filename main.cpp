@@ -260,16 +260,16 @@ int main()
     std::vector<std::string> files = {"C:\\Projects\\firstUniq.csv",
                                       "C:\\Projects\\secondUniq.csv"};
     //
-    size_t itemsToReserve = 200000000; // need memory for 4 of these 
-    std::vector<std::string> file1{};
+    const size_t itemsToReserve = 200000000;
+    std::vector<std::string> file1{}; // current file from site
     file1.reserve(itemsToReserve);
-    std::vector<std::string> file2{};
+    std::vector<std::string> file2{}; // latest file from archive
     file2.reserve(itemsToReserve);
     // static std::vector<std::string> pairs{}; // memory economy
     // pairs.reserve(itemsToReserve);
-    static std::vector<std::string> firstUniq{};
+    static std::vector<std::string> firstUniq{}; // uniq values in file1
     firstUniq.reserve(itemsToReserve);
-    static std::vector<std::string> secondUniq{};
+    static std::vector<std::string> secondUniq{}; // uniq values in file2
     secondUniq.reserve(itemsToReserve);
 
     // Downloading files (Todo: parallel processes)
