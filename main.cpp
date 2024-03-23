@@ -268,9 +268,9 @@ int main()
     // static std::vector<std::string> pairs{}; // memory economy
     // pairs.reserve(itemsToReserve);
     static std::vector<std::string> firstUniq{}; // uniq values in file1
-    firstUniq.reserve(itemsToReserve);
+    // firstUniq.reserve(itemsToReserve);
     static std::vector<std::string> secondUniq{}; // uniq values in file2
-    secondUniq.reserve(itemsToReserve);
+    // secondUniq.reserve(itemsToReserve);
 
     // Downloading files (Todo: parallel processes)
     std::cout << "Downloading..." << std::endl;
@@ -320,3 +320,17 @@ int main()
 
     return 0;
 }
+
+
+// void decode(const std::string inputFilePath, const std::string outFilePath) {
+//     FILE* f = fopen( inputFilePath.c_str(), "rb" ); if( f==0 ) return;
+//     FILE* g = fopen(outFilePath.c_str(), "wb" ); if( g==0 ) return;
+//     byte* inp = new byte[1024*1024];   if( inp==0 ) return;
+//     int flen;
+//     f_len = fread( inp, 1,f_len, f );
+//     int bzError;
+//     int BLOCK_MULTIPLIER = atoi(outFilePath.c_str());
+//     BZFILE *myBZ = BZ2_bzWriteOpen(&bzError, g, BLOCK_MULTIPLIER, 0, 0);
+//     BZ2_bzWrite(&bzError, myBZ, inp, f_len);
+//     BZ2_bzWriteClose(&bzError, myBZ, 0, NULL, NULL);
+// }
